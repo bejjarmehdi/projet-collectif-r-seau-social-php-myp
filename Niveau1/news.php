@@ -80,7 +80,7 @@
                 // Etape 2: Poser une question à la base de donnée et récupérer ses informations
                 // cette requete vous est donnée, elle est complexe mais correcte, 
                 // si vous ne la comprenez pas c'est normal, passez, on y reviendra
-                $laQuestionEnSql = "
+                $laQuestionEnSql = '
                     SELECT posts.content,
                     posts.created,
                     users.alias as author_name,  
@@ -93,8 +93,8 @@
                     LEFT JOIN likes      ON likes.post_id  = posts.id 
                     GROUP BY posts.id
                     ORDER BY posts.created DESC  
-                    LIMIT 5
-                    ";
+                    LIMIT 5'
+                    ;
                 $lesInformations = $mysqli->query($laQuestionEnSql);
                 // Vérification
                 if ( ! $lesInformations)
@@ -105,6 +105,22 @@
                     exit();
                 }
 
+                while ($row = $lesInformations->fetch_assoc()) {
+                    echo "<article>";
+                    echo "<p><strong>Auteur:</strong> " . $row['author_name'] . "</p>";
+                    echo "<p><strong>Contenu:</strong> " . $row['content'] . "</p>";
+                    echo "<p><strong>Date de création:</strong> " . $row['created'] . "</p>";
+                    echo "<p><strong>Nombre de likes:</strong> " . $row['like_number'] . "</p>";
+                    echo "<p><strong>Tags:</strong> " . $row['taglist'] . "</p>";
+                    echo "</article>";
+                }
+                
+                // Fermeture de la connexion à la base de données
+                $mysqli->close();
+              
+
+
+
                 // Etape 3: Parcourir ces données et les ranger bien comme il faut dans du html
                 // NB: à chaque tour du while, la variable post ci dessous reçois les informations du post suivant.
                 while ($post = $lesInformations->fetch_assoc())
@@ -112,6 +128,7 @@
                     //la ligne ci-dessous doit etre supprimée mais regardez ce 
                     //qu'elle affiche avant pour comprendre comment sont organisées les information dans votre 
                     echo "<pre>" . print_r($post, 1) . "</pre>";
+                   
 
                     // @todo : Votre mission c'est de remplacer les AREMPLACER par les bonnes valeurs
                     // ci-dessous par les bonnes valeurs cachées dans la variable $post 
