@@ -15,8 +15,9 @@ $connected_id = intval( $_SESSION['connected_id']);
             <img src="resoc.jpg" alt="Logo de notre réseau social"/>
             <nav id="menu">
                 <a href="news.php">Actualités</a>
-                <a href="wall.php?user_id=connected_id">Mur</a>
+                
                 <a href="feed.php?user_id=connected_id">Flux</a>
+                <a href="myWall.php?user_id=connected_id">Mur</a>
                 <a href="tags.php?tag_id=connected_id">Mots-clés</a>
             </nav>
             <nav id="user">
@@ -39,7 +40,7 @@ $connected_id = intval( $_SESSION['connected_id']);
             /**
              * Etape 1: Le mur concerne un utilisateur en particulier
              */
-            $userId = intval($_GET['user_id']);
+            $userId =intval($_GET['user_id']);
             ?>
             <?php
             /**
@@ -63,7 +64,7 @@ $connected_id = intval( $_SESSION['connected_id']);
                 <section>
                     <h3>Présentation</h3>
                     <p>Sur cette page vous trouverez tous les message des utilisatrices
-                        auxquel est abonnée l'utilisatrice: <?php echo $user ['alias']?>
+                        auxquel est abonnée l'utilisatrice: <?php echo $user_id ['id']?>
                         (n°<?php echo $userId ?>)
                     </p>
 

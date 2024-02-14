@@ -1,6 +1,7 @@
 <?php
 session_start();
 $connected_id = intval( $_SESSION['connected_id']);
+// $_SESSION['user_id']=$user['id'];
 ?>
 <!doctype html>
 <html lang="fr">
@@ -15,7 +16,7 @@ $connected_id = intval( $_SESSION['connected_id']);
             <img src="resoc.jpg" alt="Logo de notre réseau social"/>
             <nav id="menu">
                 <a href="news.php">Actualités</a>
-                <a href="wall.php?user_id=connected_id">Mur</a>
+                <a href="myWall.php?user_id=connected_id">Mur</a>
                 <a href="feed.php?user_id=connected_id">Flux</a>
                 <a href="tags.php?tag_id=connected_id">Mots-clés</a>
             </nav>
@@ -38,7 +39,7 @@ $connected_id = intval( $_SESSION['connected_id']);
              * Documentation : https://www.php.net/manual/fr/reserved.variables.get.php
              * ... mais en résumé c'est une manière de passer des informations à la page en ajoutant des choses dans l'url
              */
-            $userId =intval($_SESSION['connected_id']);
+            $userId =intval($_GET['user_id']);
             ?>
             <?php
             /**
@@ -62,18 +63,18 @@ $connected_id = intval( $_SESSION['connected_id']);
                 <section>
                     <h3>Présentation</h3>
                     <p>Sur cette page vous trouverez tous les messages de l'utilisatrice : <?php echo $user ["alias"] ?>
+                    (n° <?php echo $userId ?>)
                     </p>  
                     <a href="subscriptions.php">abonnements</a>
                     <?php
                    
-
-                if ($userId != $user ['id'] ): ?>
+                     if ($userId != $user ['id'] ): ?>
                 <button class= bouton_sabonner>s'abonner</button>
-                <?php endif; ?>
+                    <?php endif; ?>
                 </section>
             </aside>
             <main>
-                <?php
+                    <?php
                 /**
                  * Etape 3: récupérer tous les messages de l'utilisatrice
                  */

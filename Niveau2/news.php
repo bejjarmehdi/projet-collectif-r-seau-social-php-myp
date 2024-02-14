@@ -1,12 +1,13 @@
 <?php
 session_start();
 $connected_id = intval( $_SESSION['connected_id']);
+// $_SESSION['user_id']=$user['id'];
 ?>
 <!doctype html>
 <html lang="fr">
     <head>
         <meta charset="utf-8">
-        <title>ReSoC - Actualités</title> 
+        <title>ReSoC - Actualités</title>
         <meta name="author" content="Julien Falconnet">
         <link rel="stylesheet" href="style.css"/>
     </head>
@@ -15,7 +16,7 @@ $connected_id = intval( $_SESSION['connected_id']);
             <a href='admin.php'><img src="resoc.jpg" alt="Logo de notre réseau social"/></a>
             <nav id="menu">
                 <a href="news.php">Actualités</a>
-                <a href="wall.php?user_id=connected_id">Mur</a>
+                <a href="myWall.php?user_id=connected_id">Mur</a>
                 <a href="feed.php?user_id=connected_id">Flux</a>
                 <a href="tags.php?tag_id=connected_id">Mots-clés</a>
             </nav>
@@ -38,9 +39,9 @@ $connected_id = intval( $_SESSION['connected_id']);
                 </section>
             </aside>
             <main>
-                <!-- L'article qui suit est un exemple pour la présentation et 
+                <!-- L'article qui suit est un exemple pour la présentation et
                   @todo: doit etre retiré -->
-                            
+
 
                 <?php
                 /*
@@ -65,22 +66,23 @@ $connected_id = intval( $_SESSION['connected_id']);
                 }
 
                 // Etape 2: Poser une question à la base de donnée et récupérer ses informations
-                // cette requete vous est donnée, elle est complexe mais correcte, 
+                // cette requete vous est donnée, elle est complexe mais correcte,
                 // si vous ne la comprenez pas c'est normal, passez, on y reviendra
                 $laQuestionEnSql = '
                     SELECT posts.content,
                     posts.created,
-                    users.alias as author_name,  
-                    count(likes.id) as like_number,  
-                    GROUP_CONCAT(DISTINCT tags.label) AS taglist 
+                    users.alias as author_name,
+                    count(likes.id) as like_number,
+                    users.id as author_id,
+                    GROUP_CONCAT(DISTINCT tags.label) AS taglist
                     FROM posts
                     JOIN users ON  users.id=posts.user_id
-                    LEFT JOIN posts_tags ON posts.id = posts_tags.post_id  
-                    LEFT JOIN tags       ON posts_tags.tag_id  = tags.id 
-                    LEFT JOIN likes      ON likes.post_id  = posts.id 
+                    LEFT JOIN posts_tags ON posts.id = posts_tags.post_id
+                    LEFT JOIN tags       ON posts_tags.tag_id  = tags.id
+                    LEFT JOIN likes      ON likes.post_id  = posts.id
                     GROUP BY posts.id
-                    ORDER BY posts.created DESC  
-                    LIMIT 5'
+                    ORDER BY posts.created DESC
+                    LIMIT 15'
                     ;
                 $lesInformations = $mysqli->query($laQuestionEnSql);
                 // Vérification
@@ -93,18 +95,22 @@ $connected_id = intval( $_SESSION['connected_id']);
                 }
 
                 while ($row = $lesInformations->fetch_assoc()) {
+                    var_dump($row);
                     echo "<article>";
-                    echo "<p><strong>Auteur:</strong> " . $row['author_name'] . "</p>";
+                    echo "<p><strong>Auteur:</strong><a href= \"usersWalls.php?user_id=" . $row['author_id'] . "\"> "  . $row['author_name'] . "</a></p>";
+                    // header("location: usersWalls.php");
                     echo "<p><strong>Contenu:</strong> " . $row['content'] . "</p>";
                     echo "<p><strong>Date de création:</strong> " . $row['created'] . "</p>";
                     echo "<p><strong>♥</strong> " . $row['like_number'] . "</p>";
-                    echo "<p><strong>Tags:</strong> " . $row['taglist'] . "</p>";
+                    echo "<p><strong>Tags:</strong><a href=\"tags.php\"> " . $row['taglist'] . "</a></p>";
                     echo "</article>";
+
+
                 }
-                
+
                 // Fermeture de la connexion à la base de données
                 $mysqli->close();
-              
+
 
 
 
@@ -112,24 +118,24 @@ $connected_id = intval( $_SESSION['connected_id']);
                 // NB: à chaque tour du while, la variable post ci dessous reçois les informations du post suivant.
                 while ($post = $lesInformations->fetch_assoc())
                 {
-                    //la ligne ci-dessous doit etre supprimée mais regardez ce 
-                    //qu'elle affiche avant pour comprendre comment sont organisées les information dans votre 
-            
-                   
+                    //la ligne ci-dessous doit etre supprimée mais regardez ce
+                    //qu'elle affiche avant pour comprendre comment sont organisées les information dans votre
+
+
 
                     // @todo : Votre mission c'est de remplacer les AREMPLACER par les bonnes valeurs
-                    // ci-dessous par les bonnes valeurs cachées dans la variable $post 
+                    // ci-dessous par les bonnes valeurs cachées dans la variable $post
                     // on vous met le pied à l'étrier avec created
-                    // 
+                    //
                     // avec le ? > ci-dessous on sort du mode php et on écrit du html comme on veut... mais en restant dans la boucle
                     ?>
                     <article>
                         <h3>
                             <time><?php echo $post['created'] ?></time>
                         </h3>
-                        <address><?php echo $post['alias'] ?></address>
+                        <address><a></a></address>
                         <div>
-                            <p></p>
+                            <p><?php echo $post['content']?></p>
                         </div>
                         <footer>
                             <small><?php echo $post ['likes'] ?></small>
@@ -137,11 +143,11 @@ $connected_id = intval( $_SESSION['connected_id']);
                         </footer>
                     </article>
                     <?php
-                    // avec le <?php ci-dessus on retourne en mode php 
+                    // avec le <?php ci-dessus on retourne en mode php
                 }// cette accolade ferme et termine la boucle while ouverte avant.
                 ?>
-
             </main>
         </div>
     </body>
 </html>
+

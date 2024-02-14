@@ -15,7 +15,7 @@ $connected_id = intval( $_SESSION['connected_id']);
             <img src="resoc.jpg" alt="Logo de notre réseau social"/>
             <nav id="menu">
                 <a href="news.php">Actualités</a>
-                <a href="wall.php?user_id=connected_id">Mur</a>
+                <a href="myWall.php?user_id=connected_id">Mur</a>
                 <a href="feed.php?user_id=connected_id">Flux</a>
                 <a href="tags.php?tag_id=connected_id">Mots-clés</a>
             </nav>
@@ -85,13 +85,13 @@ $connected_id = intval( $_SESSION['connected_id']);
                             // Etape 7 : Se souvenir que l'utilisateur s'est connecté pour la suite
                             // documentation: https://www.php.net/manual/fr/session.examples.basic.php
                             $_SESSION['connected_id']=$user['id'];
-                            header("location: wall.php");
+                            header("location: myWall.php");
                             
                         }
                     }
                     ?>                     
                     <form action="login.php" method="post">
-                        <input type='hidden'name='???' value='achanger'>
+                        <input type='hidden'name='email' value='password'>
                         <dl>
                             <dt><label for='email'>E-Mail</label></dt>
                             <dd><input type='email'name='email'></dd>
@@ -104,7 +104,6 @@ $connected_id = intval( $_SESSION['connected_id']);
                         Pas de compte?
                         <a href='registration.php'>Inscrivez-vous.</a>
                     </p>
-
                 </article>
             </main>
         </div>

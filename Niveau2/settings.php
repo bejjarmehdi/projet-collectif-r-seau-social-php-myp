@@ -1,6 +1,7 @@
 <?php
 session_start();
 $connected_id = intval( $_SESSION['connected_id']);
+// $_SESSION['user_id']=$user['id'];
 ?>
 <!doctype html>
 <html lang="fr">
@@ -15,7 +16,7 @@ $connected_id = intval( $_SESSION['connected_id']);
             <img src="resoc.jpg" alt="Logo de notre réseau social"/>
             <nav id="menu">
                 <a href="news.php">Actualités</a>
-                <a href="wall.php?user_id=connected_id">Mur</a>
+                <a href="myWall.php?user_id=connected_id">Mur</a>
                 <a href="feed.php?user_id=connected_id">Flux</a>
                 <a href="tags.php?tag_id=connected_id">Mots-clés</a>
             </nav>
@@ -100,7 +101,6 @@ $connected_id = intval( $_SESSION['connected_id']);
                         <dt>Nombre de "J'aime" reçus</dt>
                         <dd><?php echo $user["totalrecieved"] ?></dd>
                     </dl>
-
                 </article>
             </main>
         </div>
